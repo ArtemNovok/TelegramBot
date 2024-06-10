@@ -1,15 +1,14 @@
 package main
 
 import (
+	"adviserbot/internal/clients/telegram"
 	"flag"
 	"log"
 )
 
 func main() {
-	token := mustToken()
-	_ = token
-	//TODO init client
-
+	telegramClient := telegram.New(mustHost(), mustToken())
+	_ = telegramClient
 	//TODO init fetcher
 
 	//TODO init processor
@@ -25,4 +24,13 @@ func mustToken() string {
 		log.Fatal("empty token string")
 	}
 	return token
+}
+func mustHost() string {
+	var host string
+	flag.StringVar(&host, "host", "", "host for telegram client")
+	flag.Parse()
+	if host == "" {
+		log.Fatal("empty host string")
+	}
+	return host
 }
