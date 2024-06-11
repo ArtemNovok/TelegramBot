@@ -1,4 +1,4 @@
-package telegram
+package telegram2
 
 import (
 	e "adviserbot/internal/lib/err"

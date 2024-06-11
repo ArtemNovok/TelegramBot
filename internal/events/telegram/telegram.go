@@ -1,4 +1,4 @@
-package telegram
+package telegram2
 
 import (
 	"adviserbot/internal/clients/telegram"
@@ -24,10 +24,10 @@ type Meta struct {
 	UserName string
 }
 
-func New(client *telegram.CLient, storage *storage.Storage) *Processor {
+func New(client *telegram.CLient, storage storage.Storage) *Processor {
 	return &Processor{
 		tg:      client,
-		storage: *storage,
+		storage: storage,
 	}
 }
 

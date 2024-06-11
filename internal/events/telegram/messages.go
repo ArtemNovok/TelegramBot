@@ -1,4 +1,4 @@
-package telegram
+package telegram2
 
 const msgHelp = `In order to save the page, just send me al link to it.
 

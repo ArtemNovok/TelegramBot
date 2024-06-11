@@ -2,18 +2,33 @@ package main
 
 import (
 	"adviserbot/internal/clients/telegram"
+	eventconsumer "adviserbot/internal/consumer/event-consumer"
+	telegram2 "adviserbot/internal/events/telegram"
+	"adviserbot/internal/storage/postgres"
 	"flag"
 	"log"
+	"os"
+	"strconv"
+)
+
+var (
+	storageConn  = os.Getenv("STORAGE_CON")
+	batchSize, _ = strconv.Atoi(os.Getenv("BATCH_SIZE"))
+	host         = os.Getenv("HOST")
+	token        = os.Getenv("TOKEN")
 )
 
 func main() {
-	telegramClient := telegram.New(mustHost(), mustToken())
-	_ = telegramClient
-	//TODO init fetcher
+	telegramClient := telegram.New(host, token)
+	storage, err := postgres.New(storageConn)
+	if err != nil {
+		panic(err)
+	}
+	eventFethcer := telegram2.New(telegramClient, storage)
 
-	//TODO init processor
-
-	//TODO init consumer and start consumer
+	consumer := eventconsumer.New(eventFethcer, eventFethcer, batchSize)
+	log.Println("Starting bot...")
+	consumer.Start()
 }
 
 func mustToken() string {

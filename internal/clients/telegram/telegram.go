@@ -18,7 +18,7 @@ type CLient struct {
 }
 
 const (
-	UpdateMethod      = "getUpdate"
+	UpdateMethod      = "getUpdates"
 	SendMessageMethod = "sendMessage"
 )
 
@@ -79,8 +79,7 @@ func (c *CLient) doRequest(query url.Values, method string) ([]byte, error) {
 		return nil, e.Wrap(op, err)
 	}
 	defer resp.Body.Close()
-
-	body, err := io.ReadAll(req.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, e.Wrap(op, err)
 	}

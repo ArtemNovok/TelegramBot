@@ -95,7 +95,7 @@ func (s *Storage) PickRandom(username string) (*storage.Page, error) {
 	var urls []storage.Page
 	for rows.Next() {
 		var page storage.Page
-		err = rows.Scan(&page.ID, page.URL, page.UserName)
+		err = rows.Scan(&page.ID, &page.URL, &page.UserName)
 		if err != nil {
 			return nil, e.Wrap(op, err)
 		}
@@ -105,7 +105,10 @@ func (s *Storage) PickRandom(username string) (*storage.Page, error) {
 	if l == 0 {
 		return nil, e.Wrap(op, storage.ErrNotFound)
 	}
-	ind := rand.Intn(l - 1)
+	ind := rand.Intn(l)
+	if ind == len(urls) {
+		ind--
+	}
 	return &urls[ind], nil
 }
 
